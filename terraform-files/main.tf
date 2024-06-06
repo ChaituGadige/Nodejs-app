@@ -3,29 +3,23 @@ resource "azurerm_resource_group" "pearl" {
   location = "East US"
 }
 
-resource "azurerm_app_service_plan" "app_srv_plan" {
-  name                = "wbapp-srv-pln"
+resource "azurerm_service_plan" "srv_pln" {
+  name                = "sp"
   location            = azurerm_resource_group.pearl.location
   resource_group_name = azurerm_resource_group.pearl.name
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
+  os_type             = "Linux"
+  sku_name            = "S1"
 }
 
-resource "azurerm_app_service" "appsrv" {
+resource "azurerm_linux_web_app" "wbapp" {
   name                = "webapp7216"
   location            = azurerm_resource_group.pearl.location
   resource_group_name = azurerm_resource_group.pearl.name
-  app_service_plan_id = azurerm_app_service_plan.app_srv_plan.id
+  service_plan_id     = azurerm_service_plan.srv_pln.id
 
-  
   site_config {
-    use_32_bit_worker_process = true
-    linux_fx_version = "node|12-lts"
+    application_stack {
+      node_version = "20-lts"
+    }
   }
-
-  app_settings = {
-    WEBSITE_NODE_DEFAULT_VERSION = "12.13.0"
- }
 }

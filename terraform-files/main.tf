@@ -3,7 +3,7 @@ resource "azurerm_resource_group" "pearl" {
   location = "East US"
 }
 
-resource "azurerm_app_service_plan" "app_srv_plan" {
+resource "azurerm_service_plan" "app_srv_plan" {
   name                = "wbapp-srv-pln"
   location            = azurerm_resource_group.pearl.location
   resource_group_name = azurerm_resource_group.pearl.name
